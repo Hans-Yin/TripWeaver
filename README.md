@@ -95,12 +95,3 @@ In the next steps, this will be replaced with:
 * POI retrieval (FAISS + metadata store)
 * Time-window constraint solver
 * Explanation generator
-
----
-## Contributors
-
-*   **Bohan Yin**
-    
-*   **Nick Chen**
-    
-*   **Yifei Xu**
