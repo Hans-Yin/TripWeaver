@@ -39,7 +39,7 @@ The API will be available at:
 
 ---
 
-## 🧪 Example Usage
+## Example Usage
 
 ### **POST /plan**
 
