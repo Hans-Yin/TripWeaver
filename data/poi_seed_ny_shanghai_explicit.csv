@@ -1,0 +1,11 @@
+poi_id,poi_name,city_name,latitude,longitude,poi_category,price_level,open_time_min,close_time_min,avg_dwell_time_min,popularity_score
+nyc_001,Central Park,New York,40.7851,-73.9683,park,0,360,1320,90,0.95
+nyc_002,Statue of Liberty,New York,40.6892,-74.0445,landmark,2,540,1080,120,0.97
+nyc_003,Times Square,New York,40.7580,-73.9855,entertainment,1,600,1440,60,0.94
+nyc_004,Metropolitan Museum of Art,New York,40.7794,-73.9632,museum,2,600,1080,120,0.91
+nyc_005,Brooklyn Bridge,New York,40.7061,-73.9969,walk,0,480,1380,45,0.88
+sh_001,The Bund (Waitan),Shanghai,31.2400,121.4900,landmark,0,480,1380,90,0.97
+sh_002,Yu Garden (Yuyuan),Shanghai,31.2270,121.4920,culture,1,540,1020,60,0.92
+sh_003,Shanghai Tower,Shanghai,31.2336,121.5055,skyscraper,2,600,1320,90,0.95
+sh_004,Nanjing Road Pedestrian Street,Shanghai,31.2335,121.4740,shopping,1,600,1380,75,0.90
+sh_005,Jing'an Temple,Shanghai,31.2234,121.4455,temple,1,540,1080,45,0.87
