@@ -1,4 +1,4 @@
-poi_id,name,city,lat,lng,category,price_level,open_min,close_min,avg_dwell_min,popularity
+    poi_id,name,city,lat,lng,category,price_level,open_min,close_min,avg_dwell_min,popularity
 kyo_001,Kiyomizu-dera,Kyoto,34.9949,135.7850,temple,2,600,1020,80,0.95
 kyo_002,Fushimi Inari Taisha,Kyoto,34.9671,135.7727,temple,0,0,1440,120,0.98
 kyo_003,Nishiki Market,Kyoto,35.0054,135.7642,food,1,600,1080,60,0.90
