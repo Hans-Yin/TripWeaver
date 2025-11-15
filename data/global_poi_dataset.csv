@@ -1,0 +1,48 @@
+city_name,place_name,country,place_category,price,open_time,close_time,popularity_score,latitude,longitude
+newyork,washington square park,usa,park,0,360,60,0.9,40.7309° N,73.9973° W
+newyork,statue of liberty,usa,landmark,25.5,540,1020,0.98,40.6892° N,74.0445° W
+newyork,central park,usa,park,0,360,60,0.96,40.7851° N,73.9683° W
+newyork,broadway theaters,usa,entertainment,82.5,840,1320,0.92,40.7590° N,73.9845° W
+newyork,macy’s herald square,usa,shopping,0,600,1320,0.88,40.7508° N,73.9896° W
+newyork,the metropolitan museum of art,usa,museum,30,600,1260,0.95,40.7794° N,73.9632° W
+newyork,times square,usa,landmark,0,0,0,0.97,40.7580° N,73.9855° W
+newyork,madison square garden,usa,entertainment,55,720,1080,0.91,40.7505° N,73.9934° W
+newyork,the edge,usa,landmark,36,600,1260,0.89,40.7549° N,74.0021° W
+shanghai,the bund,china,landmark,0,420,1380,0.94,31.2400° N,121.4900° E
+shanghai,yu garden,china,culture,6,540,1020,0.89,31.2270° N,121.4920° E
+beijing,quanjude roast duck restaurant,china,food,30,660,1320,0.93,39.9163° N,116.3906° E
+chengdu,jinli street,china,food,5,600,1380,0.84,30.6516° N,104.0489° E
+xian,terracotta army museum,china,museum,8,540,1020,0.98,34.3846° N,109.2732° E
+hangzhou,west lake,china,park,0,360,1260,0.95,30.2431° N,120.1500° E
+zhangjiajie,tianmen mountain,china,landmark,25,480,1080,0.91,29.0569° N,110.4780° E
+beijing,the forbidden city,china,museum,9,480,1020,0.98,39.9163° N,116.3970° E
+hangzhou,hangzhou tower shopping mall,china,shopping,0,600,1320,0.84,30.2720° N,120.1620° E
+seoul,gyeongbokgung palace,south korea,culture,3,540,1020,0.93,37.5796° N,126.9770° E
+seoul,bukchon hanok village,south korea,culture,0,480,1140,0.88,37.5823° N,126.9831° E
+seoul,myeongdong street,south korea,shopping,0,600,1320,0.9,37.5636° N,126.9858° E
+seoul,n seoul tower,south korea,landmark,8,600,1320,0.94,37.5512° N,126.9882° E
+seoul,gwagjang market,south korea,food,10,600,1380,0.86,37.5704° N,127.0018° E
+seoul,lotte world,south korea,entertainment,45,600,1320,0.91,37.5111° N,127.0980° E
+busan,haeundae beach,south korea,park,0,360,1260,0.93,35.1587° N,129.1604° E
+busan,jagalchi fish market,south korea,food,15,540,1320,0.85,35.0978° N,129.0301° E
+jeju,seongsan ilchulbong,south korea,landmark,5,480,1080,0.92,33.4580° N,126.9405° E
+london,the british museum,uk,museum,0,600,1080,0.96,51.5194° N,0.1270° W
+london,buckingham palace,uk,landmark,35,600,1020,0.97,51.5014° N,0.1419° W
+london,tower of london,uk,landmark,40,600,1020,0.95,51.5081° N,0.0759° W
+london,borough market,uk,shopping,0,540,1200,0.92,51.5055° N,0.0900° W
+london,london eye,uk,entertainment,33,600,1320,0.93,51.5033° N,0.1196° W
+cambridge,cambridge university,uk,culture,0,480,1020,0.91,52.2053° N,0.1218° E
+oxford,oxford university,uk,culture,0,480,1020,0.9,51.7548° N,1.2544° W
+edinburgh,edinburgh castle,uk,landmark,25,480,1080,0.94,55.9486° N,3.1999° W
+edinburgh,the royal mile,uk,culture,0,540,1320,0.89,55.9506° N,3.1870° W
+salisbury,stonehenge,uk,landmark,30,540,1080,0.95,51.1789° N,1.8262° W
+paris,eiffel tower,france,landmark,32,540,1320,0.97,48.8584° N,2.2945° E
+paris,louvre museum,france,museum,20,540,1080,0.98,48.8606° N,2.3376° E
+paris,notre-dame cathedral,france,culture,0,480,1080,0.96,48.8530° N,2.3499° E
+paris,champs-elysees,france,shopping,0,600,1320,0.95,48.8698° N,2.3073° E
+paris,montmartre & sacre-coeur,france,culture,0,480,1200,0.93,48.8867° N,2.3431° E
+paris,musee d'orsay,france,museum,18,600,1080,0.94,48.8600° N,2.3266° E
+versailles,palace of versailles,france,landmark,25,540,1080,0.96,48.8049° N,2.1204° E
+nice,promenade des anglais,france,park,0,360,1320,0.92,43.6950° N,7.2650° E
+lyon,old town,france,culture,0,480,1080,0.9,45.7640° N,4.8357° E
+paris,le procope restaurant,france,food,40,600,1020,0.89,48.8534° N,2.3390° E
