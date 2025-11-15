@@ -7,6 +7,12 @@ class TripRequest(BaseModel):
     days: int = 1
     city: Optional[str] = None
 
+class ParsedTripRequest(BaseModel):
+    query: str
+    categories: List[str]
+    city: str  # Required; parser raises ValueError if not detected
+    days: int = 1
+
 class Place(BaseModel):
     name: str
     category: str
