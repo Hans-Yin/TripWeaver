@@ -1,4 +1,4 @@
-lcity_name,place_name,country,place_category,price,open_time,close_time,popularity_score,lat,lon
+city_name,place_name,country,place_category,price,open_time,close_time,popularity_score,lat,lon
 newyork,washington square park,usa,park,0,360,60,0.9,40.7309° N,73.9973° W
 newyork,statue of liberty,usa,landmark,25.5,540,1020,0.98,40.6892° N,74.0445° W
 newyork,central park,usa,park,0,360,60,0.96,40.7851° N,73.9683° W
