@@ -2,8 +2,11 @@
 import re
 from typing import List, Optional
 
-from schemas import TripRequest, ParsedTripRequest
-
+try:
+    from .schemas import TripRequest, ParsedTripRequest
+except ImportError:
+    # Fallback for standalone execution
+    from schemas import TripRequest, ParsedTripRequest
 
 _CATEGORY_ALIASES = {
 	"park": ["park", "parks", "parkland"],
@@ -53,12 +56,14 @@ def parse_query(query: str) -> ParsedTripRequest:
 				break
 
 	categories = _normalize_categories(found)
+	explicit_categories = True
 	if not categories:
-		# try phrase-level matches (e.g., 'things to do', 'things to see' -> landmark)
-		if re.search(r"\b(see|things to do|things to see|visit|sights|sightseeing)\b", q, re.I):
-			categories = ["landmark"]
-		else:
-			categories = ["landmark"]
+		# No explicit category tokens found. Do NOT default to a category when
+		# we want 'explicit only' filtering — mark as not explicit and leave list empty.
+		explicit_categories = False
+		# however keep backward compatibility: parser can still suggest a default
+		# category for other consumers if desired. For now, return empty list.
+		categories = []
 
 	# 2) days extraction
 	days = 1
@@ -95,7 +100,7 @@ def parse_query(query: str) -> ParsedTripRequest:
 	if city is None:
 		raise ValueError(f"No city detected in query: '{q}'. Please specify a city using phrases like 'in <City>', 'to <City>', etc.")
 
-	return ParsedTripRequest(query=q, categories=categories, city=city, days=days)
+	return ParsedTripRequest(query=q, categories=categories, explicit_categories=explicit_categories, city=city, days=days)
 
 
 if __name__ == "__main__":
