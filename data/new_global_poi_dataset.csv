@@ -3,11 +3,19 @@ newyork,washington square park,usa,park,0,360,60,0.9,40.7309° N,73.9973° W
 newyork,statue of liberty,usa,landmark,25.5,540,1020,0.98,40.6892° N,74.0445° W
 newyork,central park,usa,park,0,360,60,0.96,40.7851° N,73.9683° W
 newyork,broadway theaters,usa,entertainment,82.5,840,1320,0.92,40.7590° N,73.9845° W
+<<<<<<< HEAD
 newyork,macy’s herald square,usa,shopping,0,600,1320,0.88,40.7508° N,73.9896° W
 newyork,the metropolitan museum of art,usa,museum,30,600,1260,0.95,40.7794° N,73.9632° W
 newyork,times square,usa,landmark,0,0,0,0.97,40.7580° N,73.9855° W
 newyork,madison square garden,usa,entertainment,55,720,1080,0.91,40.7505° N,73.9934° W
 newyork,the edge,usa,landmark,36,600,1260,0.89,40.7549° N,74.0021° W
+=======
+newyork ,macy’s herald square,usa,shopping,0,600,1320,0.88,40.7508° N,73.9896° W
+newyork,the metropolitan museum of art,usa,museum,30,600,1260,0.95,40.7794° N,73.9632° W
+newyork,times square,usa,landmark,0,0,0,0.97,40.7580° N,73.9855° W
+newyork ,madison square garden,usa,entertainment,55,720,1080,0.91,40.7505° N,73.9934° W
+newyork ,the edge,usa,landmark,36,600,1260,0.89,40.7549° N,74.0021° W
+>>>>>>> main
 shanghai,the bund,china,landmark,0,420,1380,0.94,31.2400° N,121.4900° E
 shanghai,yu garden,china,culture,6,540,1020,0.89,31.2270° N,121.4920° E
 beijing,quanjude roast duck restaurant,china,food,30,660,1320,0.93,39.9139° N,116.4046° E
