@@ -1,8 +1,5 @@
 # backend/debug_query.py
 """Debug script to trace food and landmarks query"""
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app.parser import parse_query
 from app.schemas import TripRequest
