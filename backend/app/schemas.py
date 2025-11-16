@@ -10,6 +10,7 @@ class TripRequest(BaseModel):
 class ParsedTripRequest(BaseModel):
     query: str
     categories: List[str]
+    explicit_categories: bool = False
     city: str  # Required; parser raises ValueError if not detected
     days: int = 1
 

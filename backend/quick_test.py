@@ -1,5 +1,5 @@
 
-from backend.retrieval import load_pois, filter_pois_by_category, top_popular_pois, as_records
+from retrieval import load_pois, filter_pois_by_category, top_popular_pois, as_records
 
 
 def main():
