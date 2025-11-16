@@ -8,42 +8,12 @@ REQUIRED_COLS = [
     "price", "open_time", "close_time", "popularity_score", "lat", "lon"
 ]
 
-# Map data categories to canonical categories recognized by the parser
-CATEGORY_MAPPING = {
-    "park": "park",
-    "landmark": "landmark",
-    "sight": "landmark",
-    "sightseeing": "landmark",
-    "museum": "museum",
-    "gallery": "museum",
-    "art": "museum",
-    "food": "food",
-    "restaurant": "food",
-    "cafe": "food",
-    "bar": "food",
-    "entertainment": "landmark",  # map entertainment venues to landmark
-    "walk": "landmark",  # walking areas are landmarks
-    "culture": "landmark",  # cultural sites are landmarks
-    "temple": "landmark",  # temples are landmarks
-    "shopping": "shopping",  # optional: map shopping if needed
-    "skyscraper": "landmark",  # famous buildings/skyscrapers are landmarks
-}
-
-def _normalize_category(cat: str) -> str:
-    """Map data category to canonical category. If not found, return as-is (lowercased)."""
-    if not cat:
-        return ""
-    cat_lower = str(cat).strip().lower()
-    return CATEGORY_MAPPING.get(cat_lower, cat_lower)
-
-def load_pois(csv_path: str = "data/new_global_poi_dataset.csv") -> pd.DataFrame:
+def load_pois(csv_path: str = "../data/new_global_poi_dataset.csv") -> pd.DataFrame:
   
     df = pd.read_csv(csv_path)
     # handle alternate column names (if any drifted)
     # try to coerce common variants
     col_alias = {
-        "poi_name": "place_name",
-        "city": "city_name",
         "price_usd": "price",
         "open_time_min": "open_time",
         "close_time_min": "close_time",
@@ -103,8 +73,6 @@ def load_pois(csv_path: str = "data/new_global_poi_dataset.csv") -> pd.DataFrame
     else:
         df["lon_float"] = df["lon"].astype(float)
 
-    # Normalize place_category to canonical categories
-    df["place_category"] = df["place_category"].apply(_normalize_category)
    
     df = df.dropna(subset=["popularity_score"])
     return df
@@ -120,7 +88,7 @@ def filter_pois_by_category(
     df = pois
 
     if city:
-        df = df[df["city_name"].str.lower() == city.replace(" ", "").strip().lower()]
+        df = df[df["city_name"].str.lower() == city.strip().lower()]
 
     if categories:
         cats = {c.strip().lower() for c in categories if c and str(c).strip()}
@@ -129,7 +97,7 @@ def filter_pois_by_category(
 
     # If no categories provided (or none matched), fall back to top popular
     if categories is None or len(df) == 0:
-        df = pois if city is None else pois[pois["city_name"].str.lower() == city.replace(" ", "").lower()]
+        df = pois if city is None else pois[pois["city_name"].str.lower() == city.strip().lower()]
 
     df = df.sort_values(["popularity_score", "price"], ascending=[False, True]).head(top_k)
     return df.reset_index(drop=True)
