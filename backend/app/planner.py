@@ -1,13 +1,14 @@
 # backend/app/planner.py
 from .schemas import TripRequest, TripPlan, DayPlan, Place
 from .parser import parse_query
+from .optimizer import select_pois_greedy
 import sys
 import os
 import pandas as pd
 
 # Add parent directory to path to import retrieval
 
-from retrieval import (
+from .retrieval import (
     load_pois,
     filter_pois_by_category,
     top_popular_pois,
@@ -50,24 +51,14 @@ def dummy_plan(req: TripRequest) -> TripPlan:
     
     # Only filter by category when the parser detected explicit categories.
     if explicit and categories:
-        # Strict category filtering: only include POIs whose category was explicitly
-        # mentioned in the query. Do NOT supplement with popular POIs of other
-        # categories — that would introduce unwanted categories like 'shopping'.
-        pois = filter_pois_by_category(pois, categories, top_k=pois_needed)
+        filtered_df = filter_pois_by_category(pois, categories, top_k=pois_needed * 2)
     else:
-        pois = top_popular_pois(pois, top_k=pois_needed)
+        filtered_df = top_popular_pois(pois, top_k=pois_needed * 2)
 
-    # Convert to list of records
-    records = as_records(pois)
-
+    # Select POIs using greedy algorithm
+    records = select_pois_greedy(filtered_df, parsed, pois_needed)
     # Convert records to Place objects
-    places = [
-        Place(
-            name=r["place_name"],
-            category=r["place_category"],
-        )
-        for r in records
-    ]
+    places = [Place(name=r["place_name"], category=r["place_category"]) for r in records]
 
     # Distribute places across days.
     day_plans = []
