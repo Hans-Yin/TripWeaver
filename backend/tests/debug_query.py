@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from app.parser import parse_query
 from app.schemas import TripRequest
 from app.planner import dummy_plan
-from retrieval import load_pois
+from app.retrieval import load_pois
 
 query = "food and landmarks in New York for 2 days"
 print(f"Query: {query}\n")
