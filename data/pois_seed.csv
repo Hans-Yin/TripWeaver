@@ -1,9 +1,0 @@
-    poi_id,name,city,lat,lng,category,price_level,open_min,close_min,avg_dwell_min,popularity
-kyo_001,Kiyomizu-dera,Kyoto,34.9949,135.7850,temple,2,600,1020,80,0.95
-kyo_002,Fushimi Inari Taisha,Kyoto,34.9671,135.7727,temple,0,0,1440,120,0.98
-kyo_003,Nishiki Market,Kyoto,35.0054,135.7642,food,1,600,1080,60,0.90
-kyo_004,Gion District,Kyoto,35.0037,135.7787,culture,1,600,1260,75,0.88
-kyo_005,Kinkaku-ji,Kyoto,35.0394,135.7292,temple,2,600,1020,60,0.96
-kyo_006,Philosopher's Path,Kyoto,35.0272,135.7984,walk,0,420,1140,60,0.80
-kyo_007,Uji Tea House,Kyoto,34.8845,135.7991,tea,1,600,1080,45,0.70
-kyo_008,Kyoto Station Food Hall,Kyoto,34.9855,135.7585,food,1,600,1320,60,0.85

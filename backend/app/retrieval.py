@@ -2,13 +2,21 @@
 from __future__ import annotations
 import pandas as pd
 from typing import Iterable, List, Optional, Dict
+from pathlib import Path
 
 REQUIRED_COLS = [
     "city_name", "place_name", "country", "place_category",
     "price", "open_time", "close_time", "popularity_score", "lat", "lon"
 ]
 
-def load_pois(csv_path: str = "../data/new_global_poi_dataset.csv") -> pd.DataFrame:
+def load_pois(csv_path: str | None = None) -> pd.DataFrame:
+    if csv_path is None:
+        project_root = Path(__file__).resolve().parent.parent.parent
+        csv_path = project_root / "data" / "global_poi_dataset.csv"
+
+    csv_path = Path(csv_path)
+    if not csv_path.exists():
+        raise FileNotFoundError(f"POI CSV not found at {csv_path}")
   
     df = pd.read_csv(csv_path)
     # handle alternate column names (if any drifted)
@@ -73,7 +81,6 @@ def load_pois(csv_path: str = "../data/new_global_poi_dataset.csv") -> pd.DataFr
     else:
         df["lon_float"] = df["lon"].astype(float)
 
-   
     df = df.dropna(subset=["popularity_score"])
     return df
 
@@ -112,7 +119,6 @@ def top_popular_pois(
 
 
 def as_records(df: pd.DataFrame) -> List[Dict]:
-    
     keep = [
         "city_name", "place_name", "country", "place_category",
         "price", "open_time", "close_time", "popularity_score",
