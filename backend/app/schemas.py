@@ -6,6 +6,7 @@ class TripRequest(BaseModel):
     query: str
     days: int = 1
     city: Optional[str] = None
+    data_source: str = "offline" # "offline" or "google"
 
 class ParsedTripRequest(BaseModel):
     query: str

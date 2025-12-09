@@ -1,9 +1,15 @@
 # backend/app/planner.py
-from .schemas import TripRequest, TripPlan, DayPlan, Place
+from .schemas import TripRequest, TripPlan, DayPlan, Place, ParsedTripRequest
 from .parser import parse_query
 from .optimizer import select_pois_greedy
-import sys
-import os
+from .retrieval import (
+    load_pois,
+    filter_pois_by_category,
+    top_popular_pois,
+    as_records,
+)
+from .google_places import search_places
+
 import pandas as pd
 
 # Add parent directory to path to import retrieval
@@ -18,90 +24,47 @@ from .retrieval import (
 
 def dummy_plan(req: TripRequest) -> TripPlan:
     """
-    Simple planner that uses retrieval and parser:
-    - Parse the query to extract city, categories, and days
-    - Filter POIs by city
-    - If categories provided: filter by categories
-    - If no categories: return top popular POIs
-    - Distribute POIs across the requested days
+    Planner pipeline:
+    1) parse query into ParsedTripRequest
+    2) choose data source (offline CSV or Google Places)
+    3) run greedy optimizer to select POIs
+    4) distribute POIs across days
     """
-    
-    # Parse the query to extract structured preferences
+    # 1) parse user query
     parsed = parse_query(req.query)
-    
-    city = parsed.city.lower()
-    # Use only categories explicitly mentioned in the query.
-    # The parser sets `explicit_categories` to True when it found explicit tokens.
-    explicit = getattr(parsed, "explicit_categories", False)
-    categories = [c.lower() for c in (parsed.categories or [])]
+
     days_requested = parsed.days
-
-    # Filter POIs by city. Use substring (case-insensitive) matching so variants
-    # like 'New York City' or 'New York, NY' still match a query for 'New York'.
-    # Load current POI dataset at request-time to pick up any normalization
-    if city == "new york" or city == "nyc" or city == "NYC" or city == "New York" or city == "New York City":
-        city_key = "newyork"
-    else:
-        city_key = city.strip().lower()
-    pois_df = load_pois()
-    pois = pois_df[pois_df["city_name"].str.lower().str.contains(city_key, na=False)]
-
-    # Request POIs: 5 per day + buffer to account for distribution
     pois_needed = days_requested * 5 + 5
-    
-    # Only filter by category when the parser detected explicit categories.
-    if explicit and categories:
-        filtered_df = filter_pois_by_category(pois, categories, top_k=pois_needed * 2)
+
+    # 2) choose data source
+    data_source = getattr(req, "data_source", "offline").lower()
+    if data_source == "google":
+        pois_df = _pois_from_google(parsed, pois_needed)
     else:
-        filtered_df = top_popular_pois(pois, top_k=pois_needed * 2)
+        pois_df = _pois_from_offline(parsed, pois_needed)
 
-    # Select POIs using greedy algorithm
-    records = select_pois_greedy(filtered_df, parsed, pois_needed)
-    # Convert records to Place objects
-    places = [Place(name=r["place_name"], category=r["place_category"]) for r in records]
+    # 3) check if there are any POIs
+    if pois_df is None or len(pois_df) == 0:
+        return TripPlan(city=parsed.city, days=[])
 
-    # Distribute places across days.
-    day_plans = []
+    # 4) greedy selection
+    records = select_pois_greedy(pois_df, parsed, pois_needed)
+    places = [
+        Place(name=r["place_name"], category=r["place_category"])
+        for r in records
+    ]
+
+    # 5) distribute across days
+    day_plans: list[DayPlan] = []
+
     if len(places) == 0:
-        # If no places found at all, fall back to top popular POIs for the city
-        # and distribute those across requested days.
-        all_pois_for_city = pois_df[pois_df["city_name"].str.lower().str.contains(city_key, na=False)]
-        fallback = top_popular_pois(all_pois_for_city, top_k=pois_needed)
-        records = as_records(fallback)
-        places = [Place(name=r["place_name"], category=r["place_category"]) for r in records]
+        # offline fallback: if no places after greedy selection, use offline dataset
+        all_pois_for_city = _pois_from_offline(parsed, pois_needed)
+        fallback_records = select_pois_greedy(all_pois_for_city, parsed, pois_needed)
+        places = [Place(name=r["place_name"], category=r["place_category"]) for r in fallback_records]
 
-    # If explicit categories were requested but we have fewer matching places
-    # than days, distribute existing matching places across the first (D-1)
-    # days and fill the last day with top popular POIs (excluding already used places).
-    if explicit and len(places) < days_requested and days_requested > 1:
-        primary_days = days_requested - 1
-        per_day_base = len(places) // primary_days
-        remainder = len(places) % primary_days
-        idx = 0
-        for day_num in range(1, primary_days + 1):
-            take = per_day_base + (1 if day_num <= remainder else 0)
-            day_places = places[idx: idx + take]
-            idx += take
-            day_plans.append(DayPlan(day=day_num, places=day_places))
-
-        # Prepare supplemental POIs for the last day: top popular in city excluding already used
-        used_names = {p.name.lower() for p in places}
-        all_pois_for_city = pois_df[pois_df["city_name"].str.lower().str.contains(city_key, na=False)]
-        supplemental_df = top_popular_pois(all_pois_for_city, top_k=pois_needed * 2)
-        supp_records = as_records(supplemental_df)
-        supplemental_places = []
-        for r in supp_records:
-            if r["place_name"].lower() in used_names:
-                continue
-            supplemental_places.append(Place(name=r["place_name"], category=r["place_category"]))
-            if len(supplemental_places) >= max(1, per_day_base or 1):
-                break
-
-        day_plans.append(DayPlan(day=days_requested, places=supplemental_places))
-        return TripPlan(city=city, days=day_plans)
-
-    # Otherwise distribute places evenly across the requested days
-    days_to_return = days_requested
+    # average distribution logic
+    days_to_return = days_requested or 1
     per_day_base = len(places) // days_to_return
     remainder = len(places) % days_to_return
     idx = 0
@@ -111,5 +74,50 @@ def dummy_plan(req: TripRequest) -> TripPlan:
         idx += take
         day_plans.append(DayPlan(day=day_num, places=day_places))
 
-    return TripPlan(city=city, days=day_plans)
+    return TripPlan(city=parsed.city, days=day_plans)
+
+
+def _pois_from_offline(parsed: ParsedTripRequest, pois_needed: int) -> pd.DataFrame:
+    """Use our offline CSV dataset to retrieve POIs for a city."""
+    city = parsed.city.lower()
+
+    # normalize city name
+    if city in {"new york", "nyc", "new york city"}:
+        city_key = "newyork"
+    else:
+        city_key = city.strip().lower()
+
+    pois_df = load_pois()
+    pois_for_city = pois_df[pois_df["city_name"].str.lower().str.contains(city_key, na=False)]
+
+    explicit = getattr(parsed, "explicit_categories", False)
+    categories = [c.lower() for c in (parsed.categories or [])]
+
+    if explicit and categories:
+        filtered_df = filter_pois_by_category(pois_for_city, categories, top_k=pois_needed * 2)
+    else:
+        filtered_df = top_popular_pois(pois_for_city, top_k=pois_needed * 2)
+
+    return filtered_df
+
+
+def _pois_from_google(parsed: ParsedTripRequest, pois_needed: int) -> pd.DataFrame:
+    """Use Google Places API to retrieve POIs for a city."""
+    city = parsed.city
+
+    if parsed.categories:
+        search_query = " ".join(parsed.categories)
+    else:
+        search_query = "tourist attractions"
+
+    raw_pois = search_places(search_query, city)
+    if not raw_pois:
+        return pd.DataFrame(columns=[
+            "city_name", "place_name", "country", "place_category",
+            "price", "open_time", "close_time", "popularity_score",
+            "lat", "lon"
+        ])
+
+    df = pd.DataFrame(raw_pois)
+    return df
 
