@@ -6,3 +6,4 @@ requests>=2.31.0
 python-dotenv>=1.0.0
 wikipedia-api>=0.7.0
 wikipedia>=1.4.0
+openai>=1.40.0

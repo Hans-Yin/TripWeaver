@@ -10,6 +10,7 @@ from .retrieval import (
 )
 from .google_places import search_places
 from .wikipedia import get_poi_summary
+from .llm_parser import llm_parse_to_parsed_trip_request
 
 import pandas as pd
 
@@ -21,8 +22,11 @@ def dummy_plan(req: TripRequest) -> TripPlan:
     3) run greedy optimizer to select POIs
     4) distribute POIs across days
     """
-    # 1) parse user query
-    parsed = parse_query(req.query)
+    # 1) parse user query (heuristic)
+    base_parsed = parse_query(req.query)
+
+    # 1.1 optional: refine with LLM parser (fallback-safe)
+    parsed = llm_parse_to_parsed_trip_request(req.query, base_parsed)
 
     days_requested = parsed.days
     pois_needed = days_requested * 5 + 5
@@ -40,7 +44,7 @@ def dummy_plan(req: TripRequest) -> TripPlan:
 
     # 4) greedy selection
     records = select_pois_greedy(pois_df, parsed, pois_needed)
-    
+
     # enrich with Wikipedia description
     places = []
     for r in records:
