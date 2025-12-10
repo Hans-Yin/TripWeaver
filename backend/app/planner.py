@@ -11,6 +11,7 @@ from .retrieval import (
 from .google_places import search_places
 from .wikipedia import get_poi_summary
 from .llm_parser import llm_parse_to_parsed_trip_request
+from .llm_explainer import build_itinerary_explanation
 
 import pandas as pd
 
@@ -82,7 +83,16 @@ def dummy_plan(req: TripRequest) -> TripPlan:
         idx += take
         day_plans.append(DayPlan(day=day_num, places=day_places))
 
-    return TripPlan(city=parsed.city, days=day_plans)
+    # Build base TripPlan
+    plan = TripPlan(city=parsed.city, days=day_plans)
+
+    # Optional: LLM explanation layer (safe fallback)
+    try:
+        plan.explanation = build_itinerary_explanation(req, parsed, plan)
+    except Exception as e:
+        print(f"[LLM explainer] Failed to generate explanation: {e}")
+
+    return plan
 
 
 def _pois_from_offline(parsed: ParsedTripRequest, pois_needed: int) -> pd.DataFrame:

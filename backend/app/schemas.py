@@ -12,13 +12,13 @@ class ParsedTripRequest(BaseModel):
     query: str
     categories: List[str]
     explicit_categories: bool = False
-    city: str  # Required; parser raises ValueError if not detected
+    city: str  
     days: int = 1
 
 class Place(BaseModel):
     name: str
     category: str
-    description: Optional[str] = None # Wikipedia / LLM description
+    description: Optional[str] = None
 
 class DayPlan(BaseModel):
     day: int
@@ -27,3 +27,4 @@ class DayPlan(BaseModel):
 class TripPlan(BaseModel):
     city: str
     days: List[DayPlan]
+    explanation: Optional[str] = None
