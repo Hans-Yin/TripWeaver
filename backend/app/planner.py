@@ -9,6 +9,7 @@ from .retrieval import (
     as_records,
 )
 from .google_places import search_places
+from .wikipedia import get_poi_summary
 
 import pandas as pd
 
@@ -49,10 +50,15 @@ def dummy_plan(req: TripRequest) -> TripPlan:
 
     # 4) greedy selection
     records = select_pois_greedy(pois_df, parsed, pois_needed)
-    places = [
-        Place(name=r["place_name"], category=r["place_category"])
-        for r in records
-    ]
+    places = []
+    for r in records:
+        # Try to fetch Wikipedia summary for the place
+        summary = get_poi_summary(r["place_name"], sentences=2)
+        places.append(Place(
+            name=r["place_name"],
+            category=r["place_category"],
+            summary=summary
+        ))
 
     # 5) distribute across days
     day_plans: list[DayPlan] = []
@@ -61,7 +67,14 @@ def dummy_plan(req: TripRequest) -> TripPlan:
         # offline fallback: if no places after greedy selection, use offline dataset
         all_pois_for_city = _pois_from_offline(parsed, pois_needed)
         fallback_records = select_pois_greedy(all_pois_for_city, parsed, pois_needed)
-        places = [Place(name=r["place_name"], category=r["place_category"]) for r in fallback_records]
+        places = []
+        for r in fallback_records:
+            summary = get_poi_summary(r["place_name"], sentences=2)
+            places.append(Place(
+                name=r["place_name"],
+                category=r["place_category"],
+                summary=summary
+            ))
 
     # average distribution logic
     days_to_return = days_requested or 1

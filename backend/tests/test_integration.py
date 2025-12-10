@@ -2,8 +2,8 @@
 """
 End-to-end integration test for parser + planner
 """
-from app.schemas import TripRequest, TripPlan
-from app.planner import dummy_plan
+from backend.app.schemas import TripRequest, TripPlan
+from backend.app.planner import dummy_plan
 
 
 def test_integration():
@@ -35,6 +35,7 @@ def test_integration():
                 print(f"  Places ({len(day_plan.places)}):")
                 for place in day_plan.places:
                     print(f"    - {place.name} ({place.category})")
+                    print(f"      Summary: {place.summary}")
             
             print("\n✓ Test passed")
             
