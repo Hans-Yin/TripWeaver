@@ -19,6 +19,7 @@ class Place(BaseModel):
     name: str
     category: str
     description: Optional[str] = None
+    summary: Optional[str] = None  # Wikipedia summary
 
 class DayPlan(BaseModel):
     day: int
