@@ -18,8 +18,7 @@ class ParsedTripRequest(BaseModel):
 class Place(BaseModel):
     name: str
     category: str
-    description: Optional[str] = None
-    summary: Optional[str] = None  # Wikipedia summary
+    description: Optional[str] = None # Wikipedia / LLM description
 
 class DayPlan(BaseModel):
     day: int

@@ -13,16 +13,6 @@ from .wikipedia import get_poi_summary
 
 import pandas as pd
 
-# Add parent directory to path to import retrieval
-
-from .retrieval import (
-    load_pois,
-    filter_pois_by_category,
-    top_popular_pois,
-    as_records,
-)
-
-
 def dummy_plan(req: TripRequest) -> TripPlan:
     """
     Planner pipeline:
@@ -50,14 +40,15 @@ def dummy_plan(req: TripRequest) -> TripPlan:
 
     # 4) greedy selection
     records = select_pois_greedy(pois_df, parsed, pois_needed)
+    
+    # enrich with Wikipedia description
     places = []
     for r in records:
-        # Try to fetch Wikipedia summary for the place
-        summary = get_poi_summary(r["place_name"], sentences=2)
+        wiki_text = get_poi_summary(r["place_name"], sentences=2)
         places.append(Place(
             name=r["place_name"],
             category=r["place_category"],
-            summary=summary
+            description=wiki_text,
         ))
 
     # 5) distribute across days
@@ -69,11 +60,11 @@ def dummy_plan(req: TripRequest) -> TripPlan:
         fallback_records = select_pois_greedy(all_pois_for_city, parsed, pois_needed)
         places = []
         for r in fallback_records:
-            summary = get_poi_summary(r["place_name"], sentences=2)
+            wiki_text = get_poi_summary(r["place_name"], sentences=2)
             places.append(Place(
                 name=r["place_name"],
                 category=r["place_category"],
-                summary=summary
+                description=wiki_text,
             ))
 
     # average distribution logic
@@ -133,4 +124,3 @@ def _pois_from_google(parsed: ParsedTripRequest, pois_needed: int) -> pd.DataFra
 
     df = pd.DataFrame(raw_pois)
     return df
-

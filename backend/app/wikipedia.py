@@ -1,20 +1,50 @@
+# backend/app/wikipedia.py
 import wikipediaapi
 import wikipedia
 
 wiki = wikipediaapi.Wikipedia(user_agent='TripWeaver', language='en')
 
-def get_poi_summary(poi_name: str, sentences: int = 3):
+
+def get_poi_summary(poi_name: str, sentences: int = 3) -> str | None:
+    """
+    Try to fetch a short Wikipedia summary for a POI name.
+
+    1) Try direct page match via wikipediaapi
+    2) If that fails, fall back to wikipedia.search + wikipedia.summary
+    3) Truncate to at most `sentences` sentences
+    """
+    # 1) direct page lookup
     page = wiki.page(poi_name)
 
-    # Page does not exist
-    if not page.exists():
+    if page.exists():
+        summary = page.summary or ""
+    else:
+        summary = ""
+
+    # 2) fallback: search if direct lookup failed / empty
+    if not summary:
+        try:
+            search_results = wikipedia.search(poi_name)
+            if not search_results:
+                return None
+            page_title = search_results[0]
+            summary = wikipedia.summary(page_title, auto_suggest=False)
+        except Exception as e:
+            print(f"Error fetching Wikipedia summary via search for '{poi_name}': {e}")
+            return None
+
+    if not summary:
         return None
 
-    summary = page.summary
-
-    # Limit number of sentences
+    # 3) Limit number of sentences
     if sentences is not None:
-        summary = ".".join(summary.split(".")[:sentences]).strip() + "."
+        parts = [p.strip() for p in summary.split(".") if p.strip()]
+        if not parts:
+            return None
+        clipped = ". ".join(parts[:sentences]).strip()
+        if not clipped.endswith("."):
+            clipped += "."
+        summary = clipped
 
     return summary
 
@@ -22,30 +52,8 @@ def get_poi_summary(poi_name: str, sentences: int = 3):
 def get_wikipedia_summary(query: str, sentences: int = 3) -> str | None:
     """
     Search Wikipedia for a query and return a summary.
-
-    Args:
-        query (str): The search keyword.
-        sentences (int): Number of sentences to include in the summary.
-
-    Returns:
-        str or None: Summary text if found, otherwise None.
     """
-    if get_poi_summary(query, sentences) == None:
-        try:
-            # Search for pages matching the query
-            search_results = wikipedia.search(query)
-            if not search_results:
-                return None
-            # Take the first relevant result
-            page_title = search_results[0]
-
-            # Get summary
-            summary = wikipedia.summary(page_title, sentences=sentences, auto_suggest=False)
-            return summary
-
-        except Exception as e:
-            print(f"Error fetching Wikipedia summary: {e}")
-            return None
+    return get_poi_summary(query, sentences=sentences)
 
 
 # Example usage
