@@ -1,6 +1,7 @@
 # backend/app/wikipedia.py
 import wikipediaapi
 import wikipedia
+import re
 
 wiki = wikipediaapi.Wikipedia(user_agent='TripWeaver', language='en')
 
@@ -38,12 +39,9 @@ def get_poi_summary(poi_name: str, sentences: int = 3) -> str | None:
 
     # 3) Limit number of sentences
     if sentences is not None:
-        parts = [p.strip() for p in summary.split(".") if p.strip()]
-        if not parts:
-            return None
-        clipped = ". ".join(parts[:sentences]).strip()
-        if not clipped.endswith("."):
-            clipped += "."
+        pattern = r'(?<=[.!?])\s+(?=[A-Z])'
+        split_sentences = re.split(pattern, summary)
+        clipped = " ".join(split_sentences[:sentences])
         summary = clipped
 
     return summary
@@ -58,7 +56,7 @@ def get_wikipedia_summary(query: str, sentences: int = 3) -> str | None:
 
 # Example usage
 if __name__ == "__main__":
-    summary = get_wikipedia_summary("Edge (New York City)", sentences=3)
+    summary = get_wikipedia_summary("Washington Square Park", sentences=3)
     if summary:
         print(summary)
     else:
