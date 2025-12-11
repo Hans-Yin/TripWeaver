@@ -47,10 +47,13 @@ Please write a friendly, concise explanation of this itinerary for the user.
 
 Requirements:
 - 1 short paragraph of overall summary.
-- Then 1-2 sentences per day explaining:
-  * the rough pace (busy vs relaxed),
-  * why these places make sense together,
-  * any notable transitions (e.g., walking between nearby spots).
+- Then for each day, provide a complete and detailed paragraph that:
+  * MUST include and mention EVERY single POI/attraction listed for that day in the itinerary,
+  * explains the full day's plan in chronological order (morning to evening),
+  * describes the rough pace (busy vs relaxed) and timing considerations,
+  * explains why these places make sense together geographically and thematically,
+  * details any notable transitions between spots (e.g., walking distance, transportation needed),
+  * includes practical information like suggested visit duration for each major attraction.
 - If helpful, mention:
   * alternative POIs the user could swap in,
   * simple food ideas (e.g., "look for local bakeries near Central Park"),
@@ -59,6 +62,11 @@ Requirements:
 Output format:
 - Plain text in English.
 - No JSON, no markdown, no bullet points. Just paragraphs.
+- Use double line breaks (blank line) to separate paragraphs:
+  * First paragraph: overall summary
+  * Then one paragraph per day (Day 1, Day 2, etc.)
+- Each day paragraph should start with "Day X:" or "Day X -" for clarity.
+- Ensure no POI from the itinerary is omitted - every attraction must be mentioned in the explanation.
 """
 
     resp = client.chat.completions.create(
