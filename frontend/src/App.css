@@ -234,12 +234,7 @@
 .tw-skel-day {
   height: 18px;
   border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    #1f2937,
-    #111827,
-    #1f2937
-  );
+  background: linear-gradient(90deg, #1f2937, #111827, #1f2937);
   background-size: 200% 100%;
   animation: tw-pulse 1.2s infinite;
   margin-bottom: 10px;
@@ -251,8 +246,12 @@
 }
 
 @keyframes tw-pulse {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* summary card */
@@ -389,8 +388,17 @@
 
 .tw-explain-text {
   font-size: 0.86rem;
-  line-height: 1.5;
+  line-height: 1.6;
   margin-bottom: 6px;
+}
+
+.tw-explain-paragraph {
+  margin: 0 0 12px 0;
+  color: #e5e7eb;
+}
+
+.tw-explain-paragraph:last-child {
+  margin-bottom: 0;
 }
 
 .tw-explain-meta {
