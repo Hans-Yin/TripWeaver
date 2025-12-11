@@ -6,14 +6,18 @@ class TripRequest(BaseModel):
     query: str
     days: int = 1
     city: Optional[str] = None
-    data_source: str = "offline" # "offline" or "google"
+    data_source: str = "offline"  # "offline" or "google"
+    max_places_per_day: Optional[int] = None
+    pace: Optional[str] = None  # e.g. "relaxed" | "standard" | "packed"
+
 
 class ParsedTripRequest(BaseModel):
     query: str
     categories: List[str]
     explicit_categories: bool = False
-    city: str  
+    city: str
     days: int = 1
+
 
 class Place(BaseModel):
     name: str

@@ -15,6 +15,7 @@ from .llm_explainer import build_itinerary_explanation
 
 import pandas as pd
 
+
 def dummy_plan(req: TripRequest) -> TripPlan:
     """
     Planner pipeline:
@@ -29,8 +30,34 @@ def dummy_plan(req: TripRequest) -> TripPlan:
     # 1.1 optional: refine with LLM parser (fallback-safe)
     parsed = llm_parse_to_parsed_trip_request(req.query, base_parsed)
 
-    days_requested = parsed.days
-    pois_needed = days_requested * 5 + 5
+    # keep original days logic
+    days_requested = parsed.days or 1
+
+    pace_raw = getattr(req, "pace", None) or ""
+    pace = pace_raw.strip().lower()
+
+    # default values based on pace
+    if pace in {"relax", "relaxed"}:
+        default_max_per_day = 3
+    elif pace == "packed":
+        default_max_per_day = 7
+    else:
+        # "standard" or anything else → behave like original (~5 per day)
+        default_max_per_day = 5
+
+    # read explicit max_places_per_day if provided
+    max_per_day = getattr(req, "max_places_per_day", None)
+    try:
+        max_per_day = int(max_per_day) if max_per_day is not None else None
+    except Exception:
+        max_per_day = None
+
+    # if user didn't specify or invalid, fall back to pace-based default
+    if max_per_day is None or max_per_day <= 0:
+        max_per_day = default_max_per_day
+
+    # total POIs we want
+    pois_needed = days_requested * max_per_day
 
     # 2) choose data source
     data_source = getattr(req, "data_source", "offline").lower()
@@ -45,6 +72,11 @@ def dummy_plan(req: TripRequest) -> TripPlan:
 
     # 4) greedy selection
     records = select_pois_greedy(pois_df, parsed, pois_needed)
+
+    # Hard cap: don't exceed days * max_per_day, even if optimizer returns more
+    max_total = days_requested * max_per_day
+    if max_total > 0 and len(records) > max_total:
+        records = records[:max_total]
 
     # enrich with Wikipedia description
     places = []
@@ -63,6 +95,11 @@ def dummy_plan(req: TripRequest) -> TripPlan:
         # offline fallback: if no places after greedy selection, use offline dataset
         all_pois_for_city = _pois_from_offline(parsed, pois_needed)
         fallback_records = select_pois_greedy(all_pois_for_city, parsed, pois_needed)
+
+        # apply the same hard cap in fallback
+        if max_total > 0 and len(fallback_records) > max_total:
+            fallback_records = fallback_records[:max_total]
+
         places = []
         for r in fallback_records:
             wiki_text = get_poi_summary(r["place_name"], sentences=2)
@@ -72,7 +109,7 @@ def dummy_plan(req: TripRequest) -> TripPlan:
                 description=wiki_text,
             ))
 
-    # average distribution logic
+    # average distribution logic (unchanged)
     days_to_return = days_requested or 1
     per_day_base = len(places) // days_to_return
     remainder = len(places) % days_to_return
