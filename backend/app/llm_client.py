@@ -2,4 +2,4 @@
 from openai import OpenAI
 
 client = OpenAI()
-LLM_MODEL = "gpt-4.1-mini"
+LLM_MODEL = "gpt-5-mini"
