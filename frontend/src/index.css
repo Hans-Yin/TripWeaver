@@ -1,68 +1,408 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+.tw-root {
   min-height: 100vh;
+  background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.tw-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto 20px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.tw-nav-left {
+  display: flex;
+  align-items: baseline;
+}
+
+.tw-logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.tw-tagline {
+  margin-left: 10px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.tw-nav-link {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid #374151;
+  padding: 6px 12px;
+}
+
+.tw-nav-link:hover {
+  border-color: #a855f7;
+  color: #e5e7eb;
+}
+
+.tw-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr);
+  gap: 18px;
+}
+
+@media (max-width: 900px) {
+  .tw-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* panel */
+.tw-panel {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.tw-title {
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+}
+
+.tw-subtitle {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.tw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tw-label {
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tw-textarea {
+  border-radius: 12px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.tw-textarea:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.6);
+}
+
+.tw-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.tw-field {
+  flex: 1;
+}
+
+.tw-label-small {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.tw-pill-group {
+  margin-top: 4px;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: #020617;
+  border: 1px solid #374151;
+}
+
+.tw-pill {
+  font-size: 0.78rem;
+  border-radius: 999px;
+  border: none;
+  padding: 5px 10px;
+  background: transparent;
+  color: #9ca3af;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.tw-pill-active {
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: white;
+}
+
+.tw-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.tw-button {
+  margin-top: 6px;
+  border-radius: 999px;
+  border: none;
+  padding: 9px 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 12px 25px rgba(236, 72, 153, 0.35);
+}
+
+.tw-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.tw-error {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.6);
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+/* hint chips */
+.tw-hints {
+  margin-top: 14px;
+}
+
+.tw-hints-title {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-bottom: 6px;
+}
+
+.tw-hint-chip {
+  margin-right: 6px;
+  margin-bottom: 4px;
+  border-radius: 999px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+/* result */
+.tw-result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tw-empty {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 18px;
+  padding: 20px;
+  border: 1px dashed #4b5563;
+  text-align: left;
+}
+
+.tw-empty h2 {
+  margin: 0 0 6px;
+}
+
+/* skeleton */
+.tw-skeleton {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 18px;
+  padding: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.tw-skel-header,
+.tw-skel-day {
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1f2937, #111827, #1f2937);
+  background-size: 200% 100%;
+  animation: tw-pulse 1.2s infinite;
+  margin-bottom: 10px;
+}
+
+.tw-skel-day {
+  height: 14px;
+  width: 80%;
+}
+
+@keyframes tw-pulse {
+  0% {
+    background-position: 200% 0;
   }
-  a:hover {
-    color: #747bff;
+  100% {
+    background-position: -200% 0;
   }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+/* summary card */
+.tw-summary-card {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.tw-summary-title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.tw-summary-sub {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* itinerary timeline */
+.tw-itinerary {
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.tw-day-card {
+  display: flex;
+  gap: 10px;
+}
+
+.tw-day-card + .tw-day-card {
+  margin-top: 14px;
+}
+
+.tw-day-timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.tw-day-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+}
+
+.tw-day-line {
+  flex: 1;
+  width: 2px;
+  margin-top: 4px;
+  background: linear-gradient(to bottom, #4b5563, transparent);
+}
+
+.tw-day-content {
+  flex: 1;
+}
+
+.tw-day-title {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.tw-day-empty {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.tw-place-card {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 12px;
+  padding: 8px 10px;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  margin-bottom: 6px;
+}
+
+.tw-place-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tw-place-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.tw-place-desc {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* category badges */
+.tw-badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+}
+
+.tw-badge-park {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.7);
+}
+
+.tw-badge-museum {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.7);
+}
+
+.tw-badge-landmark {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: rgba(234, 179, 8, 0.7);
+}
+
+.tw-badge-food {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.7);
+}
+
+/* explanation */
+.tw-explain-card {
+  margin-top: 8px;
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.tw-explain-text {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.tw-explain-meta {
+  font-size: 0.75rem;
+  color: #9ca3af;
 }
