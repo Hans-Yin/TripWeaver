@@ -397,3 +397,57 @@
   font-size: 0.75rem;
   color: #9ca3af;
 }
+
+.pace-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.pace-btn {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.6);
+  color: #e5e7eb;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pace-btn:hover {
+  border-color: #38bdf8;
+}
+
+.pace-btn.active {
+  background: radial-gradient(circle at top left, #22c55e, #38bdf8);
+  color: #0b1120;
+  border-color: transparent;
+}
+
+.pace-caption {
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.tw-number-input {
+  margin-top: 4px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+}
+
+.tw-number-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+}

@@ -2,12 +2,15 @@
 import axios from "axios";
 
 const API_BASE = "https://tripweaver.onrender.com";
+// const API_BASE = "http://127.0.0.1:8000";
 
 export interface TripRequest {
   query: string;
   days?: number;
   city?: string;
   data_source?: "offline" | "google";
+  max_places_per_day?: number;
+  pace?: string;
 }
 
 export interface Place {
