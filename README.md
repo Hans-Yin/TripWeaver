@@ -260,19 +260,43 @@ The React frontend (Vite) provides a simple UI to:
 * Toggle **Show LLM explanation**
 * Visualize the generated itinerary as a day-by-day timeline
 
-Local dev:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
 Deployed frontend:
 
 * [https://tripweaver-ai.vercel.app/](https://tripweaver-ai.vercel.app/)
 
 The frontend sends a `POST /plan` request to the FastAPI backend (locally or to the deployed Render endpoint).
+
+If you want to **run the frontend locally against a local FastAPI backend**, you need to update the API endpoint.
+
+### Edit `src/api.ts`
+
+```ts
+// src/api.ts
+
+import axios from "axios";
+
+// Use this for deployed backend (default)
+const API_BASE = "https://tripweaver.onrender.com";
+
+// Use this for local backend (uncomment when running FastAPI locally)
+// const API_BASE = "http://127.0.0.1:8000";
+```
+
+### When to change this
+
+| Scenario                        | API_BASE                          |
+| ------------------------------- | --------------------------------- |
+| Using deployed backend (Render) | `https://tripweaver.onrender.com` |
+| Running FastAPI locally         | `http://127.0.0.1:8000`           |
+
+After changing the endpoint, restart the frontend dev server:
+
+```bash
+npm run dev
+```
+
+This allows the same frontend codebase to work seamlessly with **either the local backend or the deployed backend**.
+
 
 ---
 
